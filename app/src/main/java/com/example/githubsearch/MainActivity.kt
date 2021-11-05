@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var githubRepositoriesViewModel: GithubRepositoriesViewModel
+    lateinit var githubViewModel: GithubViewModel
 
     var arrayList = ArrayList<Item>()
 
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private fun setEditTextListener() {
         edtSearchRepository.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                githubRepositoriesViewModel.loadGithubRepositories(s.toString())
+                githubViewModel.loadGithubRepo(s.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -49,10 +49,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setObserver() {
-        githubRepositoriesViewModel =
-            ViewModelProviders.of(this).get(GithubRepositoriesViewModel::class.java)
+        githubViewModel =
+            ViewModelProviders.of(this).get(GithubViewModel::class.java)
 
-        githubRepositoriesViewModel.githubRepositoriesLiveData.observe(
+        githubViewModel.githubRepoObserver().observe(
             this,
             Observer { gitHubSearch ->
                 arrayList.clear()

@@ -1,14 +1,12 @@
 package com.example.githubsearch
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.githubsearch.ModelClass.GithubSearchModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class GithubRepositoriesViewModel(app: Application) : AndroidViewModel(app) {
+class GithubRepository {
 
     val githubRepositoriesLiveData = MutableLiveData<GithubSearchModel>()
 
@@ -35,5 +33,6 @@ class GithubRepositoriesViewModel(app: Application) : AndroidViewModel(app) {
         })
 
     }
+
 
 }
