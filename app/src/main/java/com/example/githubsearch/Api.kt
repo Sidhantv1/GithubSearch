@@ -1,6 +1,6 @@
 package com.example.githubsearch
 
-import com.example.githubsearch.ModelClass.GithubSearchModel
+import com.example.githubsearch.modelClass.GithubSearchModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

@@ -1,4 +1,6 @@
-package com.example.githubsearch.ModelClass
+package com.example.githubsearch.modelClass
+
+import java.io.Serializable
 
 data class License(
     var key: String,
@@ -6,4 +8,4 @@ data class License(
     var node_id: String,
     var spdx_id: String,
     var url: String
-)
+): Serializable

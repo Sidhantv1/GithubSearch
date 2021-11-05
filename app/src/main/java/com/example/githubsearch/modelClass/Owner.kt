@@ -1,4 +1,6 @@
-package com.example.githubsearch.ModelClass
+package com.example.githubsearch.modelClass
+
+import java.io.Serializable
 
 data class Owner(
     var avatar_url: String,
@@ -19,4 +21,4 @@ data class Owner(
     var subscriptions_url: String,
     var type: String,
     var url: String
-)
+): Serializable

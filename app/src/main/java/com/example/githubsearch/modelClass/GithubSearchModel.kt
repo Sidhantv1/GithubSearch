@@ -1,4 +1,4 @@
-package com.example.githubsearch.ModelClass
+package com.example.githubsearch.modelClass
 
 data class GithubSearchModel(
     var incomplete_results: Boolean,

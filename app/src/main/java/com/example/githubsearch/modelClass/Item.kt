@@ -1,4 +1,6 @@
-package com.example.githubsearch.ModelClass
+package com.example.githubsearch.modelClass
+
+import java.io.Serializable
 
 data class Item(
     var allow_forking: Boolean,
@@ -79,4 +81,4 @@ data class Item(
     var visibility: String,
     var watchers: Int,
     var watchers_count: Int
-)
+) : Serializable

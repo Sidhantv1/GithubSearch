@@ -1,5 +1,6 @@
 package com.example.githubsearch
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,8 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.githubsearch.ModelClass.Item
+import com.example.githubsearch.modelClass.Item
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,8 +46,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setRecyclerView() {
         rvGithubRepositories?.layoutManager = LinearLayoutManager(this)
-        adapter = GitHubRepositoryAdapter()
+        adapter = GitHubRepositoryAdapter { item -> doClick(item) }
         rvGithubRepositories?.adapter = adapter
+    }
+
+    private fun doClick(repoData: Item) {
+        val i = Intent(this, RepoDetailsActivity::class.java)
+        i.putExtra("repoData", repoData)
+        startActivity(i)
     }
 
     private fun setObserver() {
