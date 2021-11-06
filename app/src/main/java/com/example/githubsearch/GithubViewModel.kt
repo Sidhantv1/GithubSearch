@@ -7,8 +7,8 @@ class GithubViewModel(app: Application) : AndroidViewModel(app) {
 
     private val githubRepository = GithubRepository()
 
-    fun loadGithubRepo(searchedRepository: String) {
-        githubRepository.loadGithubRepositories(searchedRepository)
+    fun loadGithubRepo(searchedRepository: String, page: Int, limit: Int) {
+        githubRepository.loadGithubRepositories(searchedRepository, page, limit)
     }
 
     /**

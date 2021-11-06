@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,23 +21,40 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var adapter: GitHubRepositoryAdapter
 
+    var page = 1
+
+    var limit = 20
+
+    var enteredText = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setObserver()
         setRecyclerView()
         setEditTextListener()
+        setPaginationOnScrolling()
     }
 
     private fun setEditTextListener() {
         edtSearchRepository.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                githubViewModel.loadGithubRepo(s.toString())
+                enteredText = s.toString()
+                getData(s.toString(), page, limit)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
+
+    private fun setPaginationOnScrolling() {
+        nsvGithubRepository.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight) {
+                page++
+                getData(enteredText, page, limit)
+            }
         })
     }
 
@@ -48,6 +66,10 @@ class MainActivity : AppCompatActivity() {
         rvGithubRepositories?.layoutManager = LinearLayoutManager(this)
         adapter = GitHubRepositoryAdapter { item -> doClick(item) }
         rvGithubRepositories?.adapter = adapter
+    }
+
+    private fun getData(searchedRepository: String, page: Int, limit: Int) {
+        githubViewModel.loadGithubRepo(searchedRepository, page, limit)
     }
 
     private fun doClick(repoData: Item) {
