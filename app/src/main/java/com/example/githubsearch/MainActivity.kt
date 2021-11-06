@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         edtSearchRepository.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 enteredText = s.toString()
-                getData(s.toString(), page, limit)
+                getData(enteredText, page, limit)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setAdapter() {
+        progressBar.visibility = View.GONE
         adapter.setData(arrayList)
     }
 
@@ -69,6 +71,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getData(searchedRepository: String, page: Int, limit: Int) {
+        progressBar.visibility = View.VISIBLE
         githubViewModel.loadGithubRepo(searchedRepository, page, limit)
     }
 
