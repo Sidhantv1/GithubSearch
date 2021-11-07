@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-        githubViewModel.subscribers.observe(this, Observer {
+        githubViewModel.githubRepositories.observe(this, Observer {
             if (!githubViewModel.isNetworkAvailable(this)) {
                 if (it.isNotEmpty()) {
                     tvSearchRepoTitle.visibility = View.GONE

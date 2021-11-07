@@ -9,9 +9,9 @@ import androidx.room.Query
 interface GithubRepoDAO {
 
     @Insert
-    suspend fun insertSubscriber(githubRepoDBDataClass: GithubRepoDBDataClass): Long
+    suspend fun insertGithubRepositories(githubRepoDBDataClass: GithubRepoDBDataClass): Long
 
     @Query("SELECT * FROM data_table")
-    fun getAllSubscribers(): LiveData<List<GithubRepoDBDataClass>>
+    fun getAllGithubRepositories(): LiveData<List<GithubRepoDBDataClass>>
 
 }

@@ -13,7 +13,7 @@ class GithubViewModel(private val repository: GithubRepository) : ViewModel() {
 
     private val githubRepository = GithubRepository()
 
-    val subscribers = repository.subscribers
+    val githubRepositories = repository.githubRepositories
 
     fun loadGithubRepo(searchedRepository: String, page: Int, limit: Int) {
         githubRepository.loadGithubRepositories(searchedRepository, page, limit)
