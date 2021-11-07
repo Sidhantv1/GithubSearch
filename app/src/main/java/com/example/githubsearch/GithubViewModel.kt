@@ -4,12 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.githubsearch.db.Subscriber
-import com.example.githubsearch.db.SubscriberRepository
+import com.example.githubsearch.db.GithubRepoDBDataClass
+import com.example.githubsearch.db.GithubRepository
 import kotlinx.coroutines.launch
 
 
-class GithubViewModel(private val repository: SubscriberRepository) : ViewModel() {
+class GithubViewModel(private val repository: GithubRepository) : ViewModel() {
 
     private val githubRepository = GithubRepository()
 
@@ -25,12 +25,12 @@ class GithubViewModel(private val repository: SubscriberRepository) : ViewModel(
     fun githubRepoObserver() = githubRepository.githubRepositoriesLiveData
 
 
-    fun insertDataInDB(subscriber: Subscriber) {
-        insert(subscriber)
+    fun insertDataInDB(githubRepoDBDataClass: GithubRepoDBDataClass) {
+        insert(githubRepoDBDataClass)
     }
 
-    private fun insert(subscriber: Subscriber) = viewModelScope.launch {
-        Event(repository.insert(subscriber))
+    private fun insert(githubRepoDBDataClass: GithubRepoDBDataClass) = viewModelScope.launch {
+        Event(repository.insert(githubRepoDBDataClass))
     }
 
     fun isNetworkAvailable(context: Context): Boolean {

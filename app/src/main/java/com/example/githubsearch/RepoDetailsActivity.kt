@@ -5,13 +5,13 @@ import android.graphics.Paint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.githubsearch.db.Subscriber
+import com.example.githubsearch.db.GithubRepoDBDataClass
 import kotlinx.android.synthetic.main.activity_repo_details.*
 
 
 class RepoDetailsActivity : AppCompatActivity() {
 
-    lateinit var repositoryData: Subscriber
+    lateinit var repositoryData: GithubRepoDBDataClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repo_details)
@@ -33,7 +33,7 @@ class RepoDetailsActivity : AppCompatActivity() {
 
     private fun setRepoData() {
 
-        repositoryData = intent.getSerializableExtra("repoData") as Subscriber
+        repositoryData = intent.getSerializableExtra("repoData") as GithubRepoDBDataClass
         repositoryData.apply {
             Glide.with(this@RepoDetailsActivity)
                 .load(repositoryData.repositoryImage)

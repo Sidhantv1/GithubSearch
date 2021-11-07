@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubsearch.db.Subscriber
+import com.example.githubsearch.db.GithubRepoDBDataClass
 import kotlinx.android.synthetic.main.item_view_github_repositories.view.*
 import java.util.*
 
-class GitHubRepositoryAdapter(val adapterOnClick: (Subscriber) -> Unit) :
+class GitHubRepositoryAdapter(val adapterOnClick: (GithubRepoDBDataClass) -> Unit) :
     RecyclerView.Adapter<GitHubRepositoryAdapter.ViewHolder>() {
 
-    var arrayList = ArrayList<Subscriber>()
+    var arrayList = ArrayList<GithubRepoDBDataClass>()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
@@ -40,7 +40,7 @@ class GitHubRepositoryAdapter(val adapterOnClick: (Subscriber) -> Unit) :
         holder.bind()
     }
 
-    fun setData(list: List<Subscriber>) {
+    fun setData(list: List<GithubRepoDBDataClass>) {
         arrayList.clear()
         arrayList.addAll(list)
         this.notifyDataSetChanged()

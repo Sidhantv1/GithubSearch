@@ -11,9 +11,9 @@ import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.githubsearch.db.Subscriber
-import com.example.githubsearch.db.SubscriberDataBase
-import com.example.githubsearch.db.SubscriberRepository
+import com.example.githubsearch.db.GithubRepoDBDataClass
+import com.example.githubsearch.db.GithubRepoDataBase
+import com.example.githubsearch.db.GithubRepository
 import com.example.githubsearch.modelClass.Item
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val dao = SubscriberDataBase.getInstance(application).subscriberDAO
-        val repository = SubscriberRepository(dao)
+        val dao = GithubRepoDataBase.getInstance(application).githubRepoDAO
+        val repository = GithubRepository(dao)
         val factory = SubscriberViewModelFactory(repository)
         githubViewModel = ViewModelProviders.of(this, factory).get(GithubViewModel::class.java)
         setObserver()
@@ -80,10 +80,10 @@ class MainActivity : AppCompatActivity() {
     private fun setAdapter() {
         if (githubViewModel.isNetworkAvailable(this))
             progressBar.visibility = View.GONE
-        val list = arrayListOf<Subscriber>()
+        val list = arrayListOf<GithubRepoDBDataClass>()
         arrayList.forEach {
             list.add(
-                Subscriber(
+                GithubRepoDBDataClass(
                     id = 0,
                     repositoryImage = it.owner.avatar_url,
                     repositoryFullName = it.full_name,
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         githubViewModel.loadGithubRepo(searchedRepository, page, limit)
     }
 
-    private fun doClick(repoData: Subscriber) {
+    private fun doClick(repoData: GithubRepoDBDataClass) {
         val i = Intent(this, RepoDetailsActivity::class.java)
         i.putExtra("repoData", repoData)
         startActivity(i)
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                         if (arrayList.size <= Constants.DB_LIMIT) {
                             githubRepositories.forEach { repositoryDetail ->
                                 githubViewModel.insertDataInDB(
-                                    Subscriber(
+                                    GithubRepoDBDataClass(
                                         0,
                                         repositoryDetail.owner.avatar_url,
                                         repositoryDetail.full_name,

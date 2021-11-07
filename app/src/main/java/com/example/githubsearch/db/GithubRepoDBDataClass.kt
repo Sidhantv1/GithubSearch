@@ -5,25 +5,25 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(tableName = "subscriber_data_table")
-data class Subscriber(
+@Entity(tableName = "data_table")
+data class GithubRepoDBDataClass(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "subscriber_id")
+    @ColumnInfo(name = "id")
     var id: Int,
 
-    @ColumnInfo(name = "subscriber_repo_image")
+    @ColumnInfo(name = "repo_image")
     var repositoryImage: String?,
 
-    @ColumnInfo(name = "subscriber_repo_full_name")
+    @ColumnInfo(name = "repo_full_name")
     var repositoryFullName: String?,
 
-    @ColumnInfo(name = "subscriber_repo_prj_link")
+    @ColumnInfo(name = "repo_prj_link")
     var projectLink: String?,
 
-    @ColumnInfo(name = "subscriber_repo_prj_contributor")
+    @ColumnInfo(name = "repo_prj_contributor")
     var projectContributor: String?,
 
-    @ColumnInfo(name = "subscriber_repo_prj_description")
+    @ColumnInfo(name = "repo_prj_description")
     var projectDescription: String?
 ) : Serializable

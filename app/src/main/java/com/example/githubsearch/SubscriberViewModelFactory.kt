@@ -2,9 +2,9 @@ package com.example.githubsearch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.githubsearch.db.SubscriberRepository
+import com.example.githubsearch.db.GithubRepository
 
-class SubscriberViewModelFactory(private val repository: SubscriberRepository) :
+class SubscriberViewModelFactory(private val repository: GithubRepository) :
     ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
