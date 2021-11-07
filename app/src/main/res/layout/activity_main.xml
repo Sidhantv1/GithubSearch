@@ -36,11 +36,29 @@
                 android:layout_margin="15dp"
                 app:cardCornerRadius="6dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvGithubRepositories"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/item_view_github_repositories" />
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvGithubRepositories"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        tools:listitem="@layout/item_view_github_repositories" />
+
+                    <TextView
+                        android:id="@+id/tvSearchRepoTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/search_to_display_repositories"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
 
             </androidx.cardview.widget.CardView>
 

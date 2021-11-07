@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">GithubSearch</string>
+    <string name="app_name">Search Github Repository</string>
     <string name="search_repository">Search Repository</string>
+    <string name="internet_connection">Internet Connection Is Required</string>
+    <string name="search_to_display_repositories">Search To Display Repositories</string>
 </resources>

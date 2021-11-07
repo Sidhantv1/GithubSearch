@@ -5,32 +5,41 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.githubsearch.db.Subscriber
+import com.example.githubsearch.db.SubscriberDataBase
+import com.example.githubsearch.db.SubscriberRepository
 import com.example.githubsearch.modelClass.Item
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var githubViewModel: GithubViewModel
+    private lateinit var githubViewModel: GithubViewModel
 
-    var arrayList = ArrayList<Item>()
+    private var arrayList = ArrayList<Item>()
 
-    lateinit var adapter: GitHubRepositoryAdapter
+    private lateinit var adapter: GitHubRepositoryAdapter
 
     var page = 1
 
-    var limit = 20
+    var limit = 10
 
     var enteredText = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val dao = SubscriberDataBase.getInstance(application).subscriberDAO
+        val repository = SubscriberRepository(dao)
+        val factory = SubscriberViewModelFactory(repository)
+        githubViewModel = ViewModelProviders.of(this, factory).get(GithubViewModel::class.java)
         setObserver()
         setRecyclerView()
         setEditTextListener()
@@ -40,8 +49,16 @@ class MainActivity : AppCompatActivity() {
     private fun setEditTextListener() {
         edtSearchRepository.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                enteredText = s.toString()
-                getData(enteredText, page, limit)
+                if (githubViewModel.isNetworkAvailable(this@MainActivity)) {
+                    enteredText = s.toString()
+                    getData(enteredText, page, limit)
+                } else {
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.internet_connection),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -60,8 +77,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setAdapter() {
-        progressBar.visibility = View.GONE
-        adapter.setData(arrayList)
+        if (githubViewModel.isNetworkAvailable(this))
+            progressBar.visibility = View.GONE
+        val list = arrayListOf<Subscriber>()
+        arrayList.forEach {
+            list.add(Subscriber(0, it.full_name, it.url, it.contributors_url, it.description))
+        }
+        adapter.setData(list)
     }
 
     private fun setRecyclerView() {
@@ -71,26 +93,53 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getData(searchedRepository: String, page: Int, limit: Int) {
-        progressBar.visibility = View.VISIBLE
+        if (githubViewModel.isNetworkAvailable(this))
+            progressBar.visibility = View.VISIBLE
         githubViewModel.loadGithubRepo(searchedRepository, page, limit)
     }
 
-    private fun doClick(repoData: Item) {
+    private fun doClick(repoData: Subscriber) {
         val i = Intent(this, RepoDetailsActivity::class.java)
         i.putExtra("repoData", repoData)
         startActivity(i)
     }
 
     private fun setObserver() {
-        githubViewModel =
-            ViewModelProviders.of(this).get(GithubViewModel::class.java)
-
         githubViewModel.githubRepoObserver().observe(
             this,
             Observer { gitHubSearch ->
-                arrayList.clear()
-                gitHubSearch?.items?.let { githubRepositories -> arrayList.addAll(githubRepositories) }
-                setAdapter()
+                if (githubViewModel.isNetworkAvailable(this)) {
+                    gitHubSearch?.items?.let { githubRepositories ->
+                        arrayList.addAll(githubRepositories)
+                        tvSearchRepoTitle.visibility = View.GONE
+                        rvGithubRepositories.visibility = View.VISIBLE
+                        if (arrayList.size <= 20) {
+                            githubRepositories.forEach { repositoryDetail ->
+                                githubViewModel.insertDataInDB(
+                                    Subscriber(
+                                        0,
+                                        repositoryDetail.full_name,
+                                        repositoryDetail.url,
+                                        repositoryDetail.contributors_url,
+                                        repositoryDetail.description
+                                    )
+                                )
+                            }
+                        }
+                    }
+                    setAdapter()
+                }
             })
+
+        githubViewModel.subscribers.observe(this, Observer {
+            if (!githubViewModel.isNetworkAvailable(this)) {
+                if (it.isNotEmpty()) {
+                    tvSearchRepoTitle.visibility = View.GONE
+                    rvGithubRepositories.visibility = View.VISIBLE
+                    adapter.setData(it)
+                }
+            }
+        })
+
     }
 }

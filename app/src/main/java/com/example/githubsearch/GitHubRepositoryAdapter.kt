@@ -4,19 +4,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubsearch.modelClass.Item
+import com.example.githubsearch.db.Subscriber
 import kotlinx.android.synthetic.main.item_view_github_repositories.view.*
 import java.util.*
 
-class GitHubRepositoryAdapter(val adapterOnClick: (Item) -> Unit) :
+class GitHubRepositoryAdapter(val adapterOnClick: (Subscriber) -> Unit) :
     RecyclerView.Adapter<GitHubRepositoryAdapter.ViewHolder>() {
 
-    var arrayList = ArrayList<Item>()
+    var arrayList = ArrayList<Subscriber>()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
             itemView.apply {
-                tvGithubRepository?.text = arrayList[absoluteAdapterPosition].full_name
+                tvGithubRepository?.text = arrayList[absoluteAdapterPosition].repositoryFullName
 
                 setOnClickListener {
                     adapterOnClick(arrayList[absoluteAdapterPosition])
@@ -24,7 +24,6 @@ class GitHubRepositoryAdapter(val adapterOnClick: (Item) -> Unit) :
             }
         }
     }
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -41,10 +40,9 @@ class GitHubRepositoryAdapter(val adapterOnClick: (Item) -> Unit) :
         holder.bind()
     }
 
-    fun setData(list: ArrayList<Item>) {
+    fun setData(list: List<Subscriber>) {
         arrayList.clear()
         arrayList.addAll(list)
         this.notifyDataSetChanged()
     }
-
 }
