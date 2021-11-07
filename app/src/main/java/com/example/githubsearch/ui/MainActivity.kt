@@ -1,4 +1,4 @@
-package com.example.githubsearch
+package com.example.githubsearch.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,27 +11,39 @@ import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.githubsearch.*
 import com.example.githubsearch.db.GithubRepoDBDataClass
 import com.example.githubsearch.db.GithubRepoDataBase
 import com.example.githubsearch.db.GithubRepository
 import com.example.githubsearch.modelClass.Item
 import kotlinx.android.synthetic.main.activity_main.*
 
-
+/**
+ * Search Repository Screen
+ */
 class MainActivity : AppCompatActivity() {
 
+    // ViewModel of the activity
     private lateinit var githubViewModel: GithubViewModel
 
-    private var arrayList = ArrayList<Item>()
+    // ArrayList to hold the github Repositories of type Item
+    private var githubRepoArrayList = ArrayList<Item>()
 
+    // Adapter showing the searched repositories
     private lateinit var adapter: GitHubRepositoryAdapter
 
+    // page parameter sent in the Api request
     var page = Constants.PAGE
 
+    // Response of repositories per request
     var limit = Constants.LIMIT
 
+    // Searched text
     var enteredText = ""
 
+    /**
+     * Method called when the activity is first created
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,11 +58,14 @@ class MainActivity : AppCompatActivity() {
         setPaginationOnScrolling()
     }
 
+    /**
+     * Method called when text is entered in the edittext to search the repo
+     */
     private fun setEditTextListener() {
         edtSearchRepository.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (githubViewModel.isNetworkAvailable(this@MainActivity)) {
-                    arrayList.clear()
+                    githubRepoArrayList.clear()
                     enteredText = s.toString()
                     getData(enteredText, page, limit)
                 } else {
@@ -68,6 +83,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Method called to setup pagination and recall the api when reached at the bottom
+     */
     private fun setPaginationOnScrolling() {
         nsvGithubRepository.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (scrollY == v.getChildAt(0).measuredHeight - v.measuredHeight) {
@@ -77,11 +95,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Method called to setup adapter
+     */
     private fun setAdapter() {
         if (githubViewModel.isNetworkAvailable(this))
             progressBar.visibility = View.GONE
         val list = arrayListOf<GithubRepoDBDataClass>()
-        arrayList.forEach {
+        githubRepoArrayList.forEach {
             list.add(
                 GithubRepoDBDataClass(
                     id = 0,
@@ -93,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
-        if (arrayList.size == 0) {
+        if (githubRepoArrayList.size == 0) {
             page = 1
             tvSearchRepoTitle.visibility = View.VISIBLE
             rvGithubRepositories.visibility = View.GONE
@@ -104,32 +125,46 @@ class MainActivity : AppCompatActivity() {
         adapter.setData(list)
     }
 
+    /**
+     * Method to init recycler view
+     */
     private fun setRecyclerView() {
         rvGithubRepositories?.layoutManager = LinearLayoutManager(this)
         adapter = GitHubRepositoryAdapter { item -> doClick(item) }
         rvGithubRepositories?.adapter = adapter
     }
 
+    /**
+     * Method to call the Api
+     */
     private fun getData(searchedRepository: String, page: Int, limit: Int) {
         if (githubViewModel.isNetworkAvailable(this))
             progressBar.visibility = View.VISIBLE
         githubViewModel.loadGithubRepo(searchedRepository, page, limit)
     }
 
+    /**
+     * Method to see the selected repo detail on the click
+     */
     private fun doClick(repoData: GithubRepoDBDataClass) {
         val i = Intent(this, RepoDetailsActivity::class.java)
         i.putExtra("repoData", repoData)
         startActivity(i)
     }
 
+    /**
+     * Method to set the observer
+     */
     private fun setObserver() {
+        // observer to setup the data from the api response when internet connection is there
         githubViewModel.githubRepoObserver().observe(
             this,
             Observer { gitHubSearch ->
                 if (githubViewModel.isNetworkAvailable(this)) {
                     gitHubSearch?.items?.let { githubRepositories ->
-                        arrayList.addAll(githubRepositories)
-                        if (arrayList.size <= Constants.DB_LIMIT) {
+                        githubRepoArrayList.addAll(githubRepositories)
+                        // saving in the db only till certain limited value
+                        if (githubRepoArrayList.size <= Constants.DB_LIMIT) {
                             githubRepositories.forEach { repositoryDetail ->
                                 githubViewModel.insertDataInDB(
                                     GithubRepoDBDataClass(
@@ -147,7 +182,7 @@ class MainActivity : AppCompatActivity() {
                     setAdapter()
                 }
             })
-
+        // observer of the db when internet connection is not there to setup the data from the db on screen
         githubViewModel.githubRepositories.observe(this, Observer {
             if (!githubViewModel.isNetworkAvailable(this)) {
                 if (it.isNotEmpty()) {

@@ -3,6 +3,9 @@ package com.example.githubsearch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * Retrofit Client Instance
+ */
 class RetrofitClientInstance {
 
     companion object {

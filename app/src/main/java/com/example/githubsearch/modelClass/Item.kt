@@ -1,5 +1,8 @@
 package com.example.githubsearch.modelClass
 
+/**
+ * Data class of Item model
+ */
 data class Item(
     var allow_forking: Boolean,
     var archive_url: String,

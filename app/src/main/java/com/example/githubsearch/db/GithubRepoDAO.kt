@@ -5,6 +5,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 
+/**
+ * Github Repo DAO
+ */
 @Dao
 interface GithubRepoDAO {
 

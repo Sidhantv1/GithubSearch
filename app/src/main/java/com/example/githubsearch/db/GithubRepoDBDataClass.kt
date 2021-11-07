@@ -5,6 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
+/**
+ * Data class of the db enteries
+ */
 @Entity(tableName = "data_table")
 data class GithubRepoDBDataClass(
 

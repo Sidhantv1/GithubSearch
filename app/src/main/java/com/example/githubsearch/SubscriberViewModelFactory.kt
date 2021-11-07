@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubsearch.db.GithubRepository
 
+/**
+ * ViewModel factory for the GithubRepository object created
+ */
 class SubscriberViewModelFactory(private val repository: GithubRepository) :
     ViewModelProvider.Factory {
 

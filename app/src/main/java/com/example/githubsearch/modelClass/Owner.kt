@@ -1,5 +1,8 @@
 package com.example.githubsearch.modelClass
 
+/**
+ * Data class of Owner model
+ */
 data class Owner(
     var avatar_url: String,
     var events_url: String,

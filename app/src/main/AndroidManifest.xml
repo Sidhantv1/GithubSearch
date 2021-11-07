@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GithubSearch">
-        <activity android:name=".WebViewActivity"></activity>
-        <activity android:name=".RepoDetailsActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.WebViewActivity"></activity>
+        <activity android:name=".ui.RepoDetailsActivity" />
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".RepoDetailsActivity">
+        tools:context=".ui.RepoDetailsActivity">
 
         <ImageView
             android:id="@+id/ivGithubImage"

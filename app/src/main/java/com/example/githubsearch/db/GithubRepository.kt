@@ -1,5 +1,8 @@
 package com.example.githubsearch.db
 
+/**
+ * DB Class of Github Repository
+ */
 class GithubRepository(private val dao: GithubRepoDAO) {
 
     val githubRepositories = dao.getAllGithubRepositories()

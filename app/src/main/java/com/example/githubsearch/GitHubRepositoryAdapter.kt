@@ -8,23 +8,30 @@ import com.example.githubsearch.db.GithubRepoDBDataClass
 import kotlinx.android.synthetic.main.item_view_github_repositories.view.*
 import java.util.*
 
+/**
+ * Search Repository Screen Adapter to display the repositories
+ */
 class GitHubRepositoryAdapter(val adapterOnClick: (GithubRepoDBDataClass) -> Unit) :
     RecyclerView.Adapter<GitHubRepositoryAdapter.ViewHolder>() {
 
-    var arrayList = ArrayList<GithubRepoDBDataClass>()
+    var githubRepoArrayList = ArrayList<GithubRepoDBDataClass>()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
             itemView.apply {
-                tvGithubRepository?.text = arrayList[absoluteAdapterPosition].repositoryFullName
+                tvGithubRepository?.text =
+                    githubRepoArrayList[absoluteAdapterPosition].repositoryFullName
 
                 setOnClickListener {
-                    adapterOnClick(arrayList[absoluteAdapterPosition])
+                    adapterOnClick(githubRepoArrayList[absoluteAdapterPosition])
                 }
             }
         }
     }
 
+    /**
+     * Create View Holder
+     */
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -34,15 +41,21 @@ class GitHubRepositoryAdapter(val adapterOnClick: (GithubRepoDBDataClass) -> Uni
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = arrayList.size
+    override fun getItemCount(): Int = githubRepoArrayList.size
 
+    /**
+     * Bind View Holder
+     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind()
     }
 
+    /**
+     * Set Data fetched from the api response to the adapter
+     */
     fun setData(list: List<GithubRepoDBDataClass>) {
-        arrayList.clear()
-        arrayList.addAll(list)
+        githubRepoArrayList.clear()
+        githubRepoArrayList.addAll(list)
         this.notifyDataSetChanged()
     }
 }

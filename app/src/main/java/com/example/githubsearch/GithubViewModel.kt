@@ -9,12 +9,19 @@ import com.example.githubsearch.db.GithubRepository
 import kotlinx.coroutines.launch
 
 
+/**
+ * ViewModel class
+ */
 class GithubViewModel(private val repository: GithubRepository) : ViewModel() {
 
+    // Repo Class
     private val githubRepository = GithubRepository()
 
     val githubRepositories = repository.githubRepositories
 
+    /**
+     * Method to call the Api
+     */
     fun loadGithubRepo(searchedRepository: String, page: Int, limit: Int) {
         githubRepository.loadGithubRepositories(searchedRepository, page, limit)
     }
@@ -24,15 +31,23 @@ class GithubViewModel(private val repository: GithubRepository) : ViewModel() {
      */
     fun githubRepoObserver() = githubRepository.githubRepositoriesLiveData
 
-
+    /**
+     * Methods to insert the data in the db
+     */
     fun insertDataInDB(githubRepoDBDataClass: GithubRepoDBDataClass) {
         insert(githubRepoDBDataClass)
     }
 
+    /**
+     * Methods to insert the data in the db
+     */
     private fun insert(githubRepoDBDataClass: GithubRepoDBDataClass) = viewModelScope.launch {
         Event(repository.insert(githubRepoDBDataClass))
     }
 
+    /**
+     * Methods to check if the internet connection is available or not
+     */
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
