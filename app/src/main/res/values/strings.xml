@@ -3,4 +3,10 @@
     <string name="search_repository">Search Repository</string>
     <string name="internet_connection">Internet Connection Is Required</string>
     <string name="search_to_display_repositories">Search To Display Repositories</string>
+    <string name="repository_contributor">Repository Contributor:</string>
+    <string name="repository_description">Repository Description:</string>
+    <string name="repository_link">Repository Link:</string>
+    <string name="repository_full_name">Repository Full Name:</string>
+    <string name="repository_detail_title">Repository Detail</string>
+    <string name="repository_data_title">Repository Data</string>
 </resources>

@@ -26,9 +26,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: GitHubRepositoryAdapter
 
-    var page = 1
+    var page = Constants.PAGE
 
-    var limit = 10
+    var limit = Constants.LIMIT
 
     var enteredText = ""
 
@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         edtSearchRepository.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (githubViewModel.isNetworkAvailable(this@MainActivity)) {
+                    arrayList.clear()
                     enteredText = s.toString()
                     getData(enteredText, page, limit)
                 } else {
@@ -81,7 +82,24 @@ class MainActivity : AppCompatActivity() {
             progressBar.visibility = View.GONE
         val list = arrayListOf<Subscriber>()
         arrayList.forEach {
-            list.add(Subscriber(0, it.full_name, it.url, it.contributors_url, it.description))
+            list.add(
+                Subscriber(
+                    id = 0,
+                    repositoryImage = it.owner.avatar_url,
+                    repositoryFullName = it.full_name,
+                    projectLink = it.url,
+                    projectContributor = it.contributors_url,
+                    projectDescription = it.description
+                )
+            )
+        }
+        if (arrayList.size == 0) {
+            page = 1
+            tvSearchRepoTitle.visibility = View.VISIBLE
+            rvGithubRepositories.visibility = View.GONE
+        } else {
+            tvSearchRepoTitle.visibility = View.GONE
+            rvGithubRepositories.visibility = View.VISIBLE
         }
         adapter.setData(list)
     }
@@ -111,13 +129,12 @@ class MainActivity : AppCompatActivity() {
                 if (githubViewModel.isNetworkAvailable(this)) {
                     gitHubSearch?.items?.let { githubRepositories ->
                         arrayList.addAll(githubRepositories)
-                        tvSearchRepoTitle.visibility = View.GONE
-                        rvGithubRepositories.visibility = View.VISIBLE
-                        if (arrayList.size <= 20) {
+                        if (arrayList.size <= Constants.DB_LIMIT) {
                             githubRepositories.forEach { repositoryDetail ->
                                 githubViewModel.insertDataInDB(
                                     Subscriber(
                                         0,
+                                        repositoryDetail.owner.avatar_url,
                                         repositoryDetail.full_name,
                                         repositoryDetail.url,
                                         repositoryDetail.contributors_url,
@@ -137,6 +154,9 @@ class MainActivity : AppCompatActivity() {
                     tvSearchRepoTitle.visibility = View.GONE
                     rvGithubRepositories.visibility = View.VISIBLE
                     adapter.setData(it)
+                } else {
+                    tvSearchRepoTitle.visibility = View.VISIBLE
+                    rvGithubRepositories.visibility = View.GONE
                 }
             }
         })

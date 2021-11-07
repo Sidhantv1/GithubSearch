@@ -12,6 +12,9 @@ data class Subscriber(
     @ColumnInfo(name = "subscriber_id")
     var id: Int,
 
+    @ColumnInfo(name = "subscriber_repo_image")
+    var repositoryImage: String?,
+
     @ColumnInfo(name = "subscriber_repo_full_name")
     var repositoryFullName: String?,
 

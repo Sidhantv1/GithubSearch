@@ -25,8 +25,7 @@ class GithubRepository {
             )
 
             call.enqueue(object : Callback<GithubSearchModel> {
-                override fun onFailure(call: Call<GithubSearchModel>, t: Throwable) {
-                }
+                override fun onFailure(call: Call<GithubSearchModel>, t: Throwable) {}
 
                 override fun onResponse(
                     call: Call<GithubSearchModel>,
