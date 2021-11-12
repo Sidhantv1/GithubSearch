@@ -42,7 +42,7 @@ class GithubViewModel(private val repository: GithubRepository) : ViewModel() {
      * Methods to insert the data in the db
      */
     private fun insert(githubRepoDBDataClass: GithubRepoDBDataClass) = viewModelScope.launch {
-        Event(repository.insert(githubRepoDBDataClass))
+        repository.insert(githubRepoDBDataClass)
     }
 
     /**
