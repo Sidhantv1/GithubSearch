@@ -16,6 +16,8 @@ class GithubRepository {
 
     // Live data of the Github Repository
     val githubRepositoriesLiveData = MutableLiveData<GithubSearchModel>()
+    // Live data to observe api failure
+    val githubRepositoriesApiFailureLiveData = MutableLiveData<Throwable>()
 
     /**
      * Retrofit code to get the response and errors
@@ -34,7 +36,9 @@ class GithubRepository {
 
             call.enqueue(object : Callback<GithubSearchModel> {
                 // Failure Response
-                override fun onFailure(call: Call<GithubSearchModel>, t: Throwable) {}
+                override fun onFailure(call: Call<GithubSearchModel>, t: Throwable) {
+                    githubRepositoriesApiFailureLiveData.value = t
+                }
 
                 // Success Response
                 override fun onResponse(

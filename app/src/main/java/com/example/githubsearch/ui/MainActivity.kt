@@ -182,6 +182,21 @@ class MainActivity : AppCompatActivity() {
                     setAdapter()
                 }
             })
+
+        // observer to check for if any api failure is there then to re call the api
+        githubViewModel.githubRepoApiFailure().observe(this, Observer {
+            if (githubViewModel.isNetworkAvailable(this@MainActivity)) {
+                githubRepoArrayList.clear()
+                getData(enteredText, page, limit)
+            } else {
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.internet_connection),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
         // observer of the db when internet connection is not there to setup the data from the db on screen
         githubViewModel.githubRepositories.observe(this, Observer {
             if (!githubViewModel.isNetworkAvailable(this)) {

@@ -31,6 +31,12 @@ class GithubViewModel(private val repository: GithubRepository) : ViewModel() {
      */
     fun githubRepoObserver() = githubRepository.githubRepositoriesLiveData
 
+
+    /**
+     * Method to check for the Github api failure
+     */
+    fun githubRepoApiFailure() = githubRepository.githubRepositoriesApiFailureLiveData
+
     /**
      * Methods to insert the data in the db
      */
